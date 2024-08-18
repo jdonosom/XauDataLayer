@@ -1,7 +1,4 @@
 ﻿![Xau](/images/Nodes.png "Xauro Dev")
-
-https://img.shields.io/github/license/jdonosom/XauDataLayer
-
 [![](https://img.shields.io/github/license/jdonosom/XauDataLayer)](Lisense.xtx)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
 [![GitHub contributors](https://img.shields.io/github/contributors/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
