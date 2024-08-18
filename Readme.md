@@ -1245,3 +1245,6 @@ namespace Inventarios.BL
 ```
 
 ### Licencias
+Licencia Open Source para uso no comercial/personal
+Licencia de Software Commons Clause
+Licencia comercial
