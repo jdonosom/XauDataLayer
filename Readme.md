@@ -26,7 +26,7 @@ a traves de dos archivos json o desde variables de entorno del sistema operativo
 proporcionadas directamente desde su aplicación.
 
 ### Primera entrada de configuración, archivos .json
-Archivos secret.json y ConfigAccess.json, archivo de parametros de encriptacion y 
+Archivos secrets.json y ConfigAccess.json, archivo de parametros de encriptacion y 
 archivo de configuración de acceso respectivamente.
 
 #### Archivo secret.json

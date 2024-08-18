@@ -5,9 +5,6 @@ using System.Data.Common;
 using System.Configuration;
 using System.Security.Cryptography;
 using System.Collections;
-using System.Data.SqlClient;
-using System.Reflection;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using System.Text.Json;
 using System.IO;
 using XauCfg;
@@ -53,25 +50,27 @@ namespace XauDataLayer
         public BaseDatos(string secret, string credencial)
         {
             // Verificar si existen las variable de entorno
-            string jsonSecret = Environment.GetEnvironmentVariable("secrets");
+            string jsonSecret = Environment.GetEnvironmentVariable(secret);
             if (jsonSecret == null)
             {
                 throw new BaseDatosException($"No se encontraron las variables de entorno (\"{secret}\").");
             }
 
-            string jsonCredencial = Environment.GetEnvironmentVariable("credencial");
+            string jsonCredencial = Environment.GetEnvironmentVariable(credencial);
             if (jsonCredencial == null)
             {
                 throw new BaseDatosException($"No se encontraron las variables de entorno (\"{credencial}\").");
             }
 
             // Deserializar las cadenas
-            var config = JsonSerializer.Deserialize<Parametros>(jsonSecret);
+            var config = JsonSerializer.Deserialize<Secret>(jsonSecret);
             if (config == null)
             {
                 throw new BaseDatosException($"Error en el archivo de configuración secret.");
             }
-            var configCred = JsonSerializer.Deserialize<XauCfg.Config>(jsonCredencial);
+
+
+            var configCred = JsonSerializer.Deserialize<ConfigAccess>(jsonCredencial);
             if (configCred == null)
             {
                 throw new BaseDatosException($"Error en el archivo de configuración configaccess.");
@@ -86,13 +85,13 @@ namespace XauDataLayer
 
 
 
-        public BaseDatos(string servidor, string port, string userName, string password, string provider, string dataBase)
+        public BaseDatos(string server, string port, string username, string password, string provider, string database)
         {
-            Server = servidor;
+            Server = server;
             Port = port;
-            User = userName;
+            User = username;
             Password = password;
-            Database = dataBase;
+            Database = database;
             Provider = provider;
 
             Configurar();
@@ -101,7 +100,7 @@ namespace XauDataLayer
         void CargaParametros()
         {
             string json = File.ReadAllText("ConfigAccess.json", Encoding.UTF8);
-            var config = JsonSerializer.Deserialize<XauCfg.Config>(json);
+            var config = JsonSerializer.Deserialize<XauCfg.ConfigAccess>(json);
 
             // Desencriptar los campos
             if (config != null)
@@ -110,7 +109,7 @@ namespace XauDataLayer
 
             }
         }
-        private void CargaParametros(XauCfg.Config config)
+        private void CargaParametros(XauCfg.ConfigAccess config)
         {
             // Desencriptar los campos
             if (config == null)
@@ -187,25 +186,16 @@ namespace XauDataLayer
                 throw new BaseDatosException("No se encontraron los archivos de configuración.");
             }
 
-            var config = JsonSerializer.Deserialize<Parametros>(json);
+            var config = JsonSerializer.Deserialize<Secret>(json);
             CargaSecretos(config);
-
-
         }
 
-        private void CargaSecretos(Parametros config)
+        private void CargaSecretos(Secret config)
         {
             if (config == null)
             {
                 throw new BaseDatosException("No se pudo cargar los secretos de configuración.");
             }
-
-            ParametrosClave.Frase = config.Frase;
-            ParametrosClave.Salt = config.Salt;
-            ParametrosClave.Algorit = config.Algorit;
-            ParametrosClave.Iteraciones = config.Iteraciones;
-            ParametrosClave.Vector = config.Vector;
-            ParametrosClave.TamanoClave = config.TamanoClave;
         }
 
 
@@ -242,9 +232,6 @@ namespace XauDataLayer
                         break;
                 }
                 BaseDatos.factory = DbProviderFactories.GetFactory(Provider);
-
-                //if (Provider.Equals("System.Data.SqlClient"))
-                //    BaseDatos.factory = DbProviderFactories.GetFactory(Provider);
             }
             catch (ConfigurationException ex)
             {

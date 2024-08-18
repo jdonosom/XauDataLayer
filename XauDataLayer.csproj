@@ -29,7 +29,7 @@
 		<PackageReleaseNotes>Version preliminar</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageProjectUrl>http://xauDataLayer.xauro.cl</PackageProjectUrl>
-		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<Title>XauDataLayer</Title>
 		<ImplicitUsings>disable</ImplicitUsings>

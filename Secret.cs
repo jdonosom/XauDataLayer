@@ -18,7 +18,7 @@ namespace XauCfg
 
     }
 
-    public class Parametros
+    public class Secret
     {
         public string Frase { get; set; }
         public string Salt { get; set; }
@@ -27,7 +27,7 @@ namespace XauCfg
         public string Vector { get; set; }
         public int TamanoClave { get; set; }
 
-        public Parametros()
+        public Secret()
         {
             Frase = ParametrosClave.Frase;
             Salt = ParametrosClave.Salt;
@@ -79,7 +79,7 @@ namespace XauCfg
     }
     #endregion
 
-    public class Config
+    public class ConfigAccess
     {
         public Adonet Adonet { get; set; }
         public Server Server { get; set; }
