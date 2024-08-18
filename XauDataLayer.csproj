@@ -66,7 +66,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Update="License.txt">
+		<None Update="LICENSE.txt">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

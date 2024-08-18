@@ -1,8 +1,6 @@
 ﻿![Xau](/images/Nodes.png "Xauro Dev")
 
-https://img.shields.io/github/license/jdonosom/XauDataLayer
-
-[![](https://img.shields.io/github/license/jdonosom/XauDataLayer)](Lisense.xtx)
+[![](https://img.shields.io/github/license/jdonosom/XauDataLayer)](LICENSE.txt)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
 [![GitHub contributors](https://img.shields.io/github/contributors/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
@@ -11,10 +9,7 @@ https://img.shields.io/github/license/jdonosom/XauDataLayer
 
 
 # XauDatalayer
-XauDataLayer  es parte de XauroFramework un framework rapido y lijero  para  obtener acceso 
-a bases de datos. Según el proveedor de acceso a datos que se especifique. Lo que asegura la 
-comunicación con cualquier base de datos que provea el provider para comincarse con el motor 
-de datos.
+XauDataLayer es parte de XauroFramework un framework rapido y lijero para obtener acceso a bases de datos. Según el proveedor de acceso a datos que se especifique. Lo que asegura la comunicación con cualquier base de datos.
 
 ## La clase base de BaseDatos()
 ### Propósito:
@@ -1250,6 +1245,3 @@ namespace Inventarios.BL
 ```
 
 ### Licencias
-Licencia Open Source para uso no comercial/personal
-Licencia de Software Commons Clause
-Licencia comercial
