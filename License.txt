@@ -1,0 +1,47 @@
+﻿(English)
+License
+Copyright (c) 2024 Xauro Dev
+
+Permission is granted to any person, free of charge, to obtain a copy of the software 
+and associated documentation of this software, you may work with the software freely 
+as long as its use is in non-commercial software or no economic income is received for 
+including this library in your developments.
+
+The software may only be copied, including, without limitation, the rights of use, 
+distribution in commercial software as long as you have paid the commercial use rights.
+You can contact jpdonosom@gmail.com to inquire about commercial use rights or 
+visit patreon.com/XauroDev and make a contribution to this development.
+
+The above copyright notice and permission will be included in all copies and substantial 
+portions of the software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING 
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+----------------------------------------------------------------------------------------------
+
+(Español)
+Licencia 
+Copyright (c) 2024 Xauro Dev
+
+Se otorga permiso a cualquier persona, sin cargo,  para optener una copia del software y la 
+documentación asociada de este software, usted puede trabajar con el software libremente mientras
+su uso sea en software no comercial o que no se reciba ingresos economicos por incluir esta libreria
+en sus desarrollos.
+
+El software solo puede ser copiado, incluido, sin limitación, los derechos de uso, distribución en 
+software comercial  siempre y cuando allá pagado los derechos de uso comercial.
+Usted puede comunicarse a jpdonosom@gmail.com para consultar por los derechos de uso comercial o 
+visitar patreon.com/XauroDev y realizar un  aporte a este desarrollo.
+
+El aviso de  derechos de autor anterior y el permiso se incluiran en todas las copias y partes 
+sustanciales del software.
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO, 
+ENTRE OTRAS, LAS GARANTÍAS DE COMERCIABILIDAD, ADECUACIÓN PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. 
+EN NINGÚN CASO LOS AUTORES O TITULARES DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIONES, 
+DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN CONTRACTUAL, EXTRACONTRACTUAL O DE OTRO MODO, QUE 
+SURJAN DE, A PARTE DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTRAS OPERACIONES EN EL SOFTWARE.
