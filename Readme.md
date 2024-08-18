@@ -13,8 +13,7 @@ https://img.shields.io/github/license/jdonosom/XauDataLayer
 # XauDatalayer
 XauDataLayer  es parte de XauroFramework un framework rapido y lijero  para  obtener acceso 
 a bases de datos. Según el proveedor de acceso a datos que se especifique. Lo que asegura la 
-comunicación con cualquier base de datos que provea el provider para comincarse con el motor 
-de datos.
+comunicación con cualquier base de datos.
 
 ## La clase base de BaseDatos()
 ### Propósito:
