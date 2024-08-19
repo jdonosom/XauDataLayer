@@ -9,7 +9,6 @@ using System.Text.Json;
 using System.IO;
 using XauCfg;
 
-
 namespace XauDataLayer
 {
     public class BaseDatos
@@ -196,6 +195,7 @@ namespace XauDataLayer
             {
                 throw new BaseDatosException("No se pudo cargar los secretos de configuración.");
             }
+            config.Guardar();
         }
 
 
@@ -218,20 +218,27 @@ namespace XauDataLayer
 
             try
             {
-                this.cadenaConexion = String.Format($"Server={Server};Database={Database};Uid={User};Pwd={Password}");
-
+                // Xport = $"{(Port.Equals("0") ? "1433" : $"{Port}")}";
+                // 
+                // sMySql = $"Server={Server};Port={Xport};Database={Database};Uid={User};Pwd={Password};"
+                // sSqlSr = $"Server={Server},{Port};Database={Database};Uid={User};Pwd={Password};"
+                //
+                string Xport = null;
                 switch (Provider)
                 {
                     case "System.Data.SqlClient":
+                        Server = Server + $"{(Port.Equals("0") ? ",1433" : $",{Port}")}";
                         DbProviderFactories.RegisterFactory(Provider, System.Data.SqlClient.SqlClientFactory.Instance);
                         break;
                     case "MySql.Data.MySqlClient":
+                        Server = Server + $"{(Port.Equals("0") ? ";Port=3306" : $";Port={Port}")}";
                         DbProviderFactories.RegisterFactory(Provider, MySql.Data.MySqlClient.MySqlClientFactory.Instance);
                         break;
                     default:
                         break;
                 }
                 BaseDatos.factory = DbProviderFactories.GetFactory(Provider);
+                this.cadenaConexion = String.Format($"Server={Server};Database={Database};Uid={User};Pwd={Password};");
             }
             catch (ConfigurationException ex)
             {

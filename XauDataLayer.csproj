@@ -4,7 +4,7 @@
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PackageId>Xauro.XauNuget.XauDataLayer</PackageId>
-		<Version>1.0.12</Version>
+		<Version>1.0.13</Version>
 		<Authors>XauroDev, PepeLunaPak</Authors>
 		<Product>XauDataLayer</Product>
 		<SignAssembly>True</SignAssembly>
@@ -43,7 +43,7 @@
 		<IsPublishable>True</IsPublishable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MySql.Data" Version="8.4.0" />
+		<PackageReference Include="MySql.Data" Version="9.0.0" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
