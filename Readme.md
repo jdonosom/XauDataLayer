@@ -1,4 +1,4 @@
-﻿![Xau](/images/Nodes.png "Xauro Dev")
+![Xau](/images/Nodes.png "Xauro Dev")
 
 [![](https://img.shields.io/github/license/jdonosom/XauDataLayer)](LICENSE.txt)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/jdonosom/XauDataLayer)](https://github.com/jdonosom/)
