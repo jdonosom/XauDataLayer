@@ -11,6 +11,14 @@
 ### Indice
 * [Documentación Español](#espanol)
 * [Documentation English](#english)
+* [Ejemplo / Example Project](#ejemplo)
+
+<a id="ejemplo" name="top"></a> 
+#
+# Proyecto de ejemplo
+Para revisar un ejemplo de implementación, descargue el archivo zip y descomprímalo en su computadora.<br>
+To review an example deployment, download the zip file and unzip it on your computer.
+https://github.com/jdonosom/TestXauDataLayer
 
 
 <a id="espanol" name="español"></a> 
@@ -1253,6 +1261,7 @@ namespace Inventarios.BL
 
 ### Licencias
 Licencia Open Source para uso no comercial/personal
+
 
 <a id="english" name="english"></a> 
 #

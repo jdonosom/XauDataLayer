@@ -4,7 +4,7 @@
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PackageId>Xauro.XauNuget.XauDataLayer</PackageId>
-		<Version>1.0.13</Version>
+		<Version>1.0.14</Version>
 		<Authors>XauroDev, PepeLunaPak</Authors>
 		<Product>XauDataLayer</Product>
 		<SignAssembly>True</SignAssembly>
