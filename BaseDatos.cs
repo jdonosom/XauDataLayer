@@ -223,7 +223,7 @@ namespace XauDataLayer
                 // sMySql = $"Server={Server};Port={Xport};Database={Database};Uid={User};Pwd={Password};"
                 // sSqlSr = $"Server={Server},{Port};Database={Database};Uid={User};Pwd={Password};"
                 //
-                string Xport = null;
+                //string Xport = null;
                 switch (Provider)
                 {
                     case "System.Data.SqlClient":
@@ -444,20 +444,35 @@ namespace XauDataLayer
         }
 
 
-        //public void AsignarParametroImage(string nombre, System.IO.MemoryStream valor = null )
         public void AsignarParametroImage(string nombre, byte[] valor = null)
         {
             DbParameter param = comando.CreateParameter();
+            param.DbType = System.Data.DbType.Binary;
             param.Direction = ParameterDirection.Input;
             param.ParameterName = nombre;
             // param.Value = valor.GetBuffer();
             param.Value = valor;
 
             comando.Parameters.Add(param);
-
-            // this.comando.Parameters.Add(SqlDbType.Image);
-            //this.comando.Parameters[nombre].Value = valor.GetBuffer();
         }
+
+        public void AsignarParametroBytes(string nombre, byte[] valor)
+        {
+            this.AsignarParametroImage(nombre, valor);
+        }
+
+        public void AsignarParametroByte(string nombre, byte valor = 0)
+        {
+            DbParameter param = comando.CreateParameter();
+            param.DbType = System.Data.DbType.Byte;
+            param.Direction = ParameterDirection.Input;
+            param.ParameterName = nombre;
+            param.Value = valor;
+
+            comando.Parameters.Add(param);
+        }
+
+
 
         /// <summary>
         /// Asigna un parámetro al comando creado.
