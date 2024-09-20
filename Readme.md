@@ -1312,7 +1312,7 @@ Access configuration file, the file contains the definition of the following par
 
 #### content of the second file, endpoint and credentials
 ```
-{"Adonet":{"_Adonet":"System.Data.SqlClient","Encriptado":false},"Server":{"_Server":".","_Port":"0","Encriptado":false},"Database":{"_Database":"lTbwN1L6TdH9NoYIiQGK6g==","Encriptado":true},"User":{"_User":"huHANxisiRQAn8qX9g/SZw==","Encriptado":true},"Password":{"_Password":"q5jTQlGvo5ME\u002BpurJnJF6Q==","Encriptado":true}}
+{"Adonet":{"Proveedor":"System.Data.SqlClient","Encriptado":false},"Server":{"Nombre":".","Puerto":"1433","Encriptado":false},"Database":{"Nombre":"Test","Encriptado":false},"User":{"Nombre":"sa","Encriptado":false},"Password":{"Secreto":"123456##","Encriptado":false}}
 ```
 
 Nice view of .json (just for content understanding)
