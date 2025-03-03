@@ -88,7 +88,7 @@ Vista hermosa del .json (solo para la conprención del contenido)
 }
 ```
 
-Vista hermosa del .json (solo para la conprención del contenido)
+Vista hermosa del .json (solo para la comprensión del contenido)
 ```
 {
     "Adonet": {
