@@ -76,7 +76,7 @@ siguientes parámetros.
 ﻿{"Adonet":{"Proveedor":"System.Data.SqlClient","Encriptado":false},"Server":{"Nombre":".","Puerto":"1433","Encriptado":false},"Database":{"Nombre":"Test","Encriptado":false},"User":{"Nombre":"sa","Encriptado":false},"Password":{"Secreto":"123456##","Encriptado":false}}
 ```
 
-Vista hermosa del .json (solo para la conprención del contenido)
+Vista hermosa del .json (solo para la comprensión del contenido)
 ```
 {
     "Frase": "N\u0026\u0026PSeL\u0026#@wMU0Go%lis",
