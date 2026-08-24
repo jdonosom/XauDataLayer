@@ -1,12 +1,14 @@
-﻿using System;
-using System.Text;
+﻿using Npgsql;
+using System;
+using System.Collections;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Configuration;
-using System.Security.Cryptography;
-using System.Collections;
-using System.Text.Json;
 using System.IO;
+using System.Reflection.Metadata;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using XauCfg;
 
 namespace XauDataLayer
@@ -115,59 +117,70 @@ namespace XauDataLayer
             {
                 throw new BaseDatosException("No se pudo cargar la configuración de credenciales.");
             }
-            Provider = config.Adonet.Encriptado ? EncriptacionPlus
-                .Decrypt(config.Adonet.Proveedor
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.Adonet.Proveedor;
+            Provider = config.Adonet.Encriptado 
+                ? EncriptacionPlus
+                    .Decrypt(config.Adonet.Proveedor
+                    , ParametrosClave.Frase
+                    , ParametrosClave.Salt
+                    , ParametrosClave.Algorit
+                    , ParametrosClave.Iteraciones
+                    , ParametrosClave.Vector
+                    , ParametrosClave.TamanoClave) 
+                : config.Adonet.Proveedor;
 
-            Server = config.Server.Encriptado ? EncriptacionPlus
-                .Decrypt(config.Server.Nombre
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.Server.Nombre;
+            Server = config.Server.Encriptado 
+                ? EncriptacionPlus.Decrypt(config.Server.ServerName
+                    , ParametrosClave.Frase
+                    , ParametrosClave.Salt
+                    , ParametrosClave.Algorit
+                    , ParametrosClave.Iteraciones
+                    , ParametrosClave.Vector
+                    , ParametrosClave.TamanoClave) 
+                : config.Server.ServerName;
 
-            Port = config.Server.Encriptado ? EncriptacionPlus
-                .Decrypt(config.Server.Puerto
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.Server.Puerto;
+            Port = config.Server.Encriptado 
+                ? EncriptacionPlus
+                    .Decrypt(config.Server.Port
+                    , ParametrosClave.Frase
+                    , ParametrosClave.Salt
+                    , ParametrosClave.Algorit
+                    , ParametrosClave.Iteraciones
+                    , ParametrosClave.Vector
+                    , ParametrosClave.TamanoClave) 
+               : config.Server.Port;
 
-            User = config.User.Encriptado ? EncriptacionPlus
-                .Decrypt(config.User.Nombre
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.User.Nombre;
+            User = config.User.Encriptado 
+                ? EncriptacionPlus
+                    .Decrypt(config.User.UserName
+                    , ParametrosClave.Frase
+                    , ParametrosClave.Salt
+                    , ParametrosClave.Algorit
+                    , ParametrosClave.Iteraciones
+                    , ParametrosClave.Vector
+                    , ParametrosClave.TamanoClave) 
+                : config.User.UserName;
 
-            Password = config.Password.Encriptado ? EncriptacionPlus
-                .Decrypt(config.Password.Secreto
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.Password.Secreto;
+            Password = config.Password.Encriptado 
+                ? EncriptacionPlus
+                    .Decrypt(config.Password.Secreto
+                    , ParametrosClave.Frase
+                    , ParametrosClave.Salt
+                    , ParametrosClave.Algorit
+                    , ParametrosClave.Iteraciones
+                    , ParametrosClave.Vector
+                    , ParametrosClave.TamanoClave) 
+                : config.Password.Secreto;
 
-            Database = config.Database.Encriptado ? EncriptacionPlus
-                .Decrypt(config.Database.Nombre
-                , ParametrosClave.Frase
-                , ParametrosClave.Salt
-                , ParametrosClave.Algorit
-                , ParametrosClave.Iteraciones
-                , ParametrosClave.Vector
-                , ParametrosClave.TamanoClave) : config.Database.Nombre;
+            Database = config.Database.Encriptado 
+                ? EncriptacionPlus
+                    .Decrypt(config.Database.DatabaseName
+                        , ParametrosClave.Frase
+                        , ParametrosClave.Salt
+                        , ParametrosClave.Algorit
+                        , ParametrosClave.Iteraciones
+                        , ParametrosClave.Vector
+                        , ParametrosClave.TamanoClave) 
+                : config.Database.DatabaseName;
 
         }
         private void CargaSecretos()
@@ -177,14 +190,12 @@ namespace XauDataLayer
             if (File.Exists("secrets.json"))
             {
                 json = File.ReadAllText("secrets.json", Encoding.UTF8);
-
             }
 
             if (json == null)
             {
                 throw new BaseDatosException("No se encontraron los archivos de configuración.");
             }
-
             var config = JsonSerializer.Deserialize<Secret>(json);
             CargaSecretos(config);
         }
@@ -205,6 +216,7 @@ namespace XauDataLayer
         /// <exception cref="BaseDatosException">Si existe un error al cargar la configuración.</exception>
         private void Configurar()
         {
+            string ConnectionString = string.Empty;
             // Valida que las propiedades qeu la funcion utilizar esten seteados
             if (string.IsNullOrEmpty(Server)
                 || string.IsNullOrEmpty(Port)
@@ -227,18 +239,24 @@ namespace XauDataLayer
                 switch (Provider)
                 {
                     case "System.Data.SqlClient":
-                        Server = Server + $"{(Port.Equals("0") ? ",1433" : $",{Port}")}";
+                        ConnectionString = Server + $"{(Port.Equals("0") ? ",1433" : $",{Port}")};Trusted_Connection=True";
                         DbProviderFactories.RegisterFactory(Provider, System.Data.SqlClient.SqlClientFactory.Instance);
                         break;
                     case "MySql.Data.MySqlClient":
-                        Server = Server + $"{(Port.Equals("0") ? ";Port=3306" : $";Port={Port}")}";
+                        ConnectionString = Server + $"{(Port.Equals("0") ? ";Port=3306" : $";Port={Port}")}";
                         DbProviderFactories.RegisterFactory(Provider, MySql.Data.MySqlClient.MySqlClientFactory.Instance);
+                        break;
+                    case "Npgsql":
+                        // Host=172.16.1.6;Port=5432;Database=documentgo;Username=jdonoso;Password=View1210;Pooling=true;Maximum Pool Size=50
+                        //ConnectionString = $"User ID={User};Password={Password};Host={Server};Port={Port};Database={Database};Pooling=true;Connection Lifetime=0;";
+                        ConnectionString = $"Host={Server};Port={Port};Database={Database};Username={User};Password={Password}";
+                        DbProviderFactories.RegisterFactory(Provider, NpgsqlFactory.Instance);
                         break;
                     default:
                         break;
                 }
                 BaseDatos.factory = DbProviderFactories.GetFactory(Provider);
-                this.cadenaConexion = String.Format($"Server={Server};Database={Database};Uid={User};Pwd={Password};");
+                this.cadenaConexion = ConnectionString;
             }
             catch (ConfigurationException ex)
             {
@@ -339,15 +357,14 @@ namespace XauDataLayer
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroCadena(string nombre, string valor)
+        public void AsignarParametroCadena(string nombre, string? valor)
         {
             DbParameter param = comando.CreateParameter();
             param.DbType = System.Data.DbType.String;
             param.Direction = ParameterDirection.Input;
             param.ParameterName = nombre;
-            param.Size = valor.Length;
-            param.Value = valor;
-
+            param.Size = valor?.Length ?? 0;
+            param.Value = valor is null ? DBNull.Value : valor;
             comando.Parameters.Add(param);
 
             // AsignarParametro(nombre, "'", valor);
@@ -358,17 +375,14 @@ namespace XauDataLayer
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroBoolean(string nombre, Boolean valor)
+        public void AsignarParametroBoolean(string nombre, Boolean? valor)
         {
             DbParameter param = comando.CreateParameter(); ;
             param.DbType = System.Data.DbType.Boolean;
             param.Direction = ParameterDirection.Input;
             param.ParameterName = nombre;
-            param.Value = valor;
-
+            param.Value = valor is null ? DBNull.Value : valor;
             comando.Parameters.Add(param);
-
-            // AsignarParametro(nombre, "", valor.ToString());
         }
 
         /// <summary>
@@ -376,17 +390,14 @@ namespace XauDataLayer
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroEntero(string nombre, int valor)
+        public void AsignarParametroEntero(string nombre, int? valor)
         {
             DbParameter param = comando.CreateParameter(); ;
             param.DbType = System.Data.DbType.Int32;
             param.Direction = ParameterDirection.Input;
             param.ParameterName = nombre;
-            param.Value = valor;
-
+            param.Value = valor is null ? DBNull.Value : valor;
             comando.Parameters.Add(param);
-
-            // AsignarParametro(nombre, "", valor.ToString());
         }
 
         /// <summary>
@@ -394,7 +405,7 @@ namespace XauDataLayer
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroDouble(string nombre, double valor)
+        public void AsignarParametroDouble(string nombre, double? valor)
         {
 
             DbParameter param = comando.CreateParameter(); ;
@@ -409,11 +420,26 @@ namespace XauDataLayer
         }
 
         /// <summary>
+        /// Asigna un parámetro de tipo long al comando creado.
+        /// </summary>
+        /// <param name="nombre">El nombre del parámetro.</param>
+        /// <param name="valor">El valor del parámetro.</param>
+        public void AsignarParametroLong(string nombre, long? valor)
+        {
+            DbParameter param = comando.CreateParameter(); ;
+            param.DbType = System.Data.DbType.Int64;
+            param.Direction = ParameterDirection.Input;
+            param.ParameterName = nombre;
+            param.Value = valor is null ? DBNull.Value : valor;
+            comando.Parameters.Add(param);
+        }
+
+        /// <summary>
         /// Asigna un parámetro de tipo double al comando creado.
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroDecimal(string nombre, decimal valor)
+        public void AsignarParametroDecimal(string nombre, decimal? valor)
         {
             DbParameter param = comando.CreateParameter(); ;
             param.DbType = System.Data.DbType.Decimal;
@@ -429,7 +455,7 @@ namespace XauDataLayer
         /// </summary>
         /// <param name="nombre">El nombre del parámetro.</param>
         /// <param name="valor">El valor del parámetro.</param>
-        public void AsignarParametroFloat(string nombre, float valor)
+        public void AsignarParametroFloat(string nombre, float? valor)
         {
 
             DbParameter param = comando.CreateParameter(); ;
@@ -444,7 +470,7 @@ namespace XauDataLayer
         }
 
 
-        public void AsignarParametroImage(string nombre, byte[] valor = null)
+        public void AsignarParametroImage(string nombre, byte[]? valor)
         {
             DbParameter param = comando.CreateParameter();
             param.DbType = System.Data.DbType.Binary;
@@ -456,12 +482,12 @@ namespace XauDataLayer
             comando.Parameters.Add(param);
         }
 
-        public void AsignarParametroBytes(string nombre, byte[] valor)
+        public void AsignarParametroBytes(string nombre, byte[]? valor)
         {
             this.AsignarParametroImage(nombre, valor);
         }
 
-        public void AsignarParametroByte(string nombre, byte valor = 0)
+        public void AsignarParametroByte(string nombre, byte? valor)
         {
             DbParameter param = comando.CreateParameter();
             param.DbType = System.Data.DbType.Byte;
@@ -505,6 +531,22 @@ namespace XauDataLayer
 
             // AsignarParametro(nombre, "'", valor.ToString());
         }
+
+        /// <summary>
+        /// Asigna un parámetro de tipo fecha al comando creado.
+        /// </summary>
+        /// <param name="nombre">El nombre del parámetro.</param>
+        /// <param name="valor">El valor del parámetro.</param>
+        public void AsignarParametroFechaOffSet(string nombre, DateTimeOffset? valor)
+        {
+            DbParameter param = comando.CreateParameter(); ;
+            param.DbType = System.Data.DbType.DateTime;
+            param.Direction = ParameterDirection.Input;
+            param.ParameterName = nombre;
+            param.Value = valor;
+            comando.Parameters.Add(param);
+        }
+
 
         /// <summary>
         /// Ejecuta el comando creado y retorna el resultado de la consulta.
@@ -594,50 +636,6 @@ namespace XauDataLayer
                 this.transaccion.Commit();
             }
         }
-
-        public string EncryptString(string inputString, int dwKeySize, string xmlString)
-        {
-            RSACryptoServiceProvider rsaCryptoServiceProvider = new RSACryptoServiceProvider(dwKeySize);
-            rsaCryptoServiceProvider.FromXmlString(xmlString);
-            int keySize = dwKeySize / 8;
-            byte[] bytes = Encoding.UTF32.GetBytes(inputString);
-
-            // RSACryptoServiceProvider here;
-
-            int maxLength = keySize - 42;
-            int dataLength = bytes.Length;
-            int iterations = dataLength / maxLength;
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i <= iterations; i++)
-            {
-                byte[] tempBytes = new byte[
-                        (dataLength - maxLength * i > maxLength) ? maxLength :
-                                                      dataLength - maxLength * i];
-                Buffer.BlockCopy(bytes, maxLength * i, tempBytes, 0,
-                                  tempBytes.Length);
-                byte[] encryptedBytes = rsaCryptoServiceProvider.Encrypt(tempBytes,
-                                                                          true);
-                stringBuilder.Append(Convert.ToBase64String(encryptedBytes));
-            }
-            return stringBuilder.ToString();
-        }
-
-        public string DecryptString(string inputString, int dwKeySize, string xmlString)
-        {
-            RSACryptoServiceProvider rsaCryptoServiceProvider = new RSACryptoServiceProvider(dwKeySize);
-            rsaCryptoServiceProvider.FromXmlString(xmlString);
-            int base64BlockSize = ((dwKeySize / 8) % 3 != 0) ? (((dwKeySize / 8) / 3) * 4) + 4 : ((dwKeySize / 8) / 3) * 4;
-            int iterations = inputString.Length / base64BlockSize;
-            ArrayList arrayList = new ArrayList();
-            for (int i = 0; i < iterations; i++)
-            {
-                byte[] encryptedBytes = Convert.FromBase64String(inputString.Substring(base64BlockSize * i, base64BlockSize));
-                Array.Reverse(encryptedBytes);
-                arrayList.AddRange(rsaCryptoServiceProvider.Decrypt(encryptedBytes, true));
-            }
-            return Encoding.UTF32.GetString(arrayList.ToArray(Type.GetType("System.Byte")) as byte[]);
-        }
-
 
     }
 }

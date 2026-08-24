@@ -56,19 +56,19 @@ namespace XauCfg
     }
     public class Server
     {
-        public string Nombre { get; set; }
-        public string Puerto { get; set; }
+        public string ServerName { get; set; }
+        public string Port { get; set; }
         public bool Encriptado { get; set; }
     }
 
     public class Database
     {
-        public string Nombre { get; set; }
+        public string DatabaseName { get; set; }
         public bool Encriptado { get; set; }
     }
     public class User
     {
-        public string Nombre { get; set; }
+        public string UserName{ get; set; }
         public bool Encriptado { get; set; }
     }
 
@@ -78,7 +78,6 @@ namespace XauCfg
         public bool Encriptado { get; set; }
     }
     #endregion
-
     public class ConfigAccess
     {
         public Adonet Adonet { get; set; }

@@ -7,7 +7,7 @@
 		<Version>1.0.14</Version>
 		<Authors>XauroDev, PepeLunaPak</Authors>
 		<Product>XauDataLayer</Product>
-		<SignAssembly>True</SignAssembly>
+		<SignAssembly>False</SignAssembly>
 		<ManifestCertificateThumbprint>87f8c608c81bcf5dd055487539bfd128339deb0a</ManifestCertificateThumbprint>
 		<ManifestKeyFile>XauDataLayer.pfx</ManifestKeyFile>
 		<ManifestKeyContainer>VS_KEY_1997A780B71C409D</ManifestKeyContainer>
@@ -33,6 +33,7 @@
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<Title>XauDataLayer</Title>
 		<ImplicitUsings>disable</ImplicitUsings>
+		<AssemblyOriginatorKeyFile>XauDataLayer.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
@@ -44,6 +45,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="MySql.Data" Version="9.0.0" />
+		<PackageReference Include="Npgsql" Version="10.0.3" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
@@ -65,6 +67,9 @@
 		<None Update="images\Nodes.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="libs\xau_crypto.dll">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="LICENSE.txt">
 			<Pack>True</Pack>
