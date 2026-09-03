@@ -1,14 +1,17 @@
 ﻿using Npgsql;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.IO;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using XauCfg;
 
 namespace XauDataLayer
@@ -239,7 +242,9 @@ namespace XauDataLayer
                 switch (Provider)
                 {
                     case "System.Data.SqlClient":
-                        ConnectionString = Server + $"{(Port.Equals("0") ? ",1433" : $",{Port}")};Trusted_Connection=True";
+
+                        ConnectionString = $"Server={Server},{Port};Database={Database};User Id={User};Password={Password};";
+
                         DbProviderFactories.RegisterFactory(Provider, System.Data.SqlClient.SqlClientFactory.Instance);
                         break;
                     case "MySql.Data.MySqlClient":
@@ -599,18 +604,143 @@ namespace XauDataLayer
             this.comando.ExecuteNonQuery();
         }
 
+
+        /// <summary>
+        /// Ejecuta una consulta y devuelve los resultados como una Lista de objetos de tipo T.
+        /// Cubre los casos de 0, 1 o múltiples filas.
+        /// </summary>
+        public async Task<List<T>> EjecutarConsultaAsync<T>(
+            string sentenciaSQL
+            , object parametros = null) where T : new()
+        {
+            // 1. Asegurar conexión
+            if (this.conexion == null || this.conexion.State != ConnectionState.Open)
+            {
+                this.Conectar();
+            }
+
+            // 2. Crear comando independiente (no interfiere con this.comando)
+            using var cmd = factory.CreateCommand();
+            cmd.Connection = this.conexion;
+            cmd.CommandText = sentenciaSQL;
+            cmd.CommandType = CommandType.Text;
+
+            if (this.transaccion != null)
+            {
+                cmd.Transaction = this.transaccion;
+            }
+
+            // 3. Mapear parámetros desde el objeto anónimo
+            if (parametros != null)
+            {
+                foreach (var prop in parametros.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    var param = cmd.CreateParameter();
+                    string paramName = prop.Name.StartsWith("@") ? prop.Name : $"@{prop.Name}";
+                    param.ParameterName = paramName;
+                    param.Value = prop.GetValue(parametros) ?? (object)DBNull.Value;
+                    cmd.Parameters.Add(param);
+                }
+            }
+
+            // 4. Ejecutar y mapear a una LISTA
+            var lista = new List<T>();
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                T obj = new T();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    string columnName = reader.GetName(i);
+
+                    // Buscar propiedad que coincida con el nombre de la columna (insensible a mayúsculas)
+                    var prop = typeof(T).GetProperty(columnName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                    if (prop != null && prop.CanWrite)
+                    {
+                        object value = reader.GetValue(i);
+                        if (value != null && value != DBNull.Value)
+                        {
+                            // Manejar tipos nulables (ej: int?)
+                            Type targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                            try
+                            {
+                                prop.SetValue(obj, Convert.ChangeType(value, targetType));
+                            }
+                            catch (InvalidCastException)
+                            {
+                                // Si hay un error de conversión, se ignora o puedes agregar un log aquí
+                            }
+                        }
+                    }
+                }
+                lista.Add(obj);
+            }
+
+            return lista; // Siempre devuelve una lista (vacía o con elementos)
+        }
+
+
+        /// <summary>
+        /// Ejecuta un comando que no devuelve datos (INSERT, UPDATE, DELETE) de forma asíncrona.
+        /// Devuelve el número de filas afectadas por la operación.
+        /// </summary>
+        /// <param name="sentenciaSQL">La sentencia SQL a ejecutar.</param>
+        /// <param name="parametros">Objeto anónimo con los parámetros de la consulta.</param>
+        /// <returns>Número de filas afectadas.</returns>
+        public async Task<int> EjecutarComandoAsync(string sentenciaSQL, object parametros = null)
+        {
+            // 1. Asegurar conexión
+            if (this.conexion == null || this.conexion.State != ConnectionState.Open)
+            {
+                this.Conectar();
+            }
+
+            // 2. Crear comando independiente (no interfiere con this.comando)
+            using var cmd = factory.CreateCommand();
+            cmd.Connection = this.conexion;
+            cmd.CommandText = sentenciaSQL;
+            cmd.CommandType = CommandType.Text;
+
+            // 3. Asignar transacción si existe una activa
+            if (this.transaccion != null)
+            {
+                cmd.Transaction = this.transaccion;
+            }
+
+            // 4. Mapear parámetros desde el objeto anónimo (misma lógica que tu EjecutarConsultaAsync)
+            if (parametros != null)
+            {
+                foreach (var prop in parametros.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    var param = cmd.CreateParameter();
+                    string paramName = prop.Name.StartsWith("@") ? prop.Name : $"@{prop.Name}";
+                    param.ParameterName = paramName;
+                    param.Value = prop.GetValue(parametros) ?? (object)DBNull.Value;
+                    cmd.Parameters.Add(param);
+                }
+            }
+
+            // 5. Ejecutar y retornar el número de filas afectadas
+            return await cmd.ExecuteNonQueryAsync();
+        }
+
+
+
         /// <summary>
         /// Comienza una transacción en base a la conexion abierta.
         /// Todo lo que se ejecute luego de esta ionvocación estará 
         /// dentro de una tranasacción.
         /// </summary>
         public void ComenzarTransaccion()
-        {
-            if (this.transaccion == null)
             {
-                this.transaccion = this.conexion.BeginTransaction();
+                if (this.transaccion == null)
+                {
+                    this.transaccion = this.conexion.BeginTransaction();
+                }
             }
-        }
+
 
         /// <summary>
         /// Cancela la ejecución de una transacción.
