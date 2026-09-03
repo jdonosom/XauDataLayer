@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 		<PackageId>Xauro.XauNuget.XauDataLayer</PackageId>
 		<Version>1.0.14</Version>
 		<Authors>XauroDev, PepeLunaPak</Authors>
@@ -34,6 +34,7 @@
 		<Title>XauDataLayer</Title>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<AssemblyOriginatorKeyFile>XauDataLayer.snk</AssemblyOriginatorKeyFile>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
